@@ -1,0 +1,1 @@
+sysprep /oobe /generalize /shutdown /unattend:C:\Sysprep\<your unattend xml path normal_profile.xml or user_profile.xml>

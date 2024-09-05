@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <!-- Bu bölümler, Windows kurulumunun farklı aşamalarını tanımlar -->
+
+    <!-- 1. Generalizasyon Aşaması: Bu aşama, Windows'u genel bir imaj haline getirir -->
+    <settings pass="generalize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="1033" xmlns="urn:schemas-microsoft-com:unattend">
+            <!-- Otomatik Giriş -->
+            <FirstLogonCommands>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -Command "Start-Process cmd.exe -ArgumentList '/c net user admin password /add' -Verb RunAs"</CommandLine>
+                    <Description>Admin kullanıcısını oluşturma</Description>
+                    <Order>1</Order>
+                </SynchronousCommand>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -Command "Start-Process cmd.exe -ArgumentList '/c net localgroup administrators admin /add' -Verb RunAs"</CommandLine>
+                    <Description>Admin kullanıcısını yönetici grubuna ekleme</Description>
+                    <Order>2</Order>
+                </SynchronousCommand>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -Command "Start-Process cmd.exe -ArgumentList '/c net user misafir /add' -Verb RunAs"</CommandLine>
+                    <Description>Misafir kullanıcısını oluşturma</Description>
+                    <Order>3</Order>
+                </SynchronousCommand>
+                <SynchronousCommand>
+                    <CommandLine>powershell.exe -Command "Start-Process cmd.exe -ArgumentList '/c net localgroup users misafir /add' -Verb RunAs"</CommandLine>
+                    <Description>Misafir kullanıcısını standart kullanıcı grubuna ekleme</Description>
+                    <Order>4</Order>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+        </component>
+    </settings>
+
+    <!-- 2. OOBE (Out of Box Experience) Aşaması: Kurulum sonrası kullanıcı arayüzünü yapılandırır -->
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="1033" xmlns="urn:schemas-microsoft-com:unattend">
+            <!-- Kullanıcı Hesabı ve Oturum Açma -->
+            <AutoLogon>
+                <Password>
+                    <Value>password</Value>
+                    <PlainText>true</PlainText>
+                </Password>
+                <Enabled>true</Enabled>
+                <Username>admin</Username>
+            </AutoLogon>
+            <UserAccounts>
+                <AdministratorPassword>
+                    <Value>password</Value>
+                    <PlainText>true</PlainText>
+                </AdministratorPassword>
+                <LocalAccounts>
+                    <LocalAccount>
+                        <Password>
+                            <Value>password</Value>
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Description>Admin Kullanıcı</Description>
+                        <DisplayName>admin</DisplayName>
+                        <Group>Administrators</Group>
+                        <Name>admin</Name>
+                    </LocalAccount>
+                    <LocalAccount>
+                        <Password>
+                            <Value>password</Value>
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Description>Misafir Kullanıcı</Description>
+                        <DisplayName>misafir</DisplayName>
+                        <Group>Users</Group>
+                        <Name>misafir</Name>
+                    </LocalAccount>
+                </LocalAccounts>
+            </UserAccounts>
+
+            <!-- Kurulum sırasında klavye ve ağ ayarlarını atlama -->
+            <SkipUserOOBE>true</SkipUserOOBE>
+            <SkipMachineOOBE>true</SkipMachineOOBE>
+            <SkipNetworkSetup>true</SkipNetworkSetup>
+            <SkipRearm>true</SkipRearm>
+        </component>
+    </settings>
+</unattend>

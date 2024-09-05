@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <!-- 1. Generalizasyon Aşaması: Bu aşama, Windows'u genel bir imaj haline getirir -->
+    <settings pass="generalize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="1033" xmlns="urn:schemas-microsoft-com:unattend">
+            <!-- Bu aşamada herhangi bir özel ayar yapılmaz -->
+        </component>
+    </settings>
+
+    <!-- 2. OOBE (Out of Box Experience) Aşaması: Kurulum sonrası kullanıcı arayüzünü yapılandırır -->
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="1033" xmlns="urn:schemas-microsoft-com:unattend">
+            <!-- Otomatik Giriş Ayarları -->
+            <AutoLogon>
+                <Password>
+                    <Value>password</Value> <!-- Burada mevcut kullanıcı parolasını girin -->
+                    <PlainText>true</PlainText>
+                </Password>
+                <Enabled>true</Enabled>
+                <Username>ExistingUser</Username> <!-- Burada mevcut kullanıcı adını girin -->
+            </AutoLogon>
+
+            <!-- Kullanıcı Hesabı Ayarları -->
+            <UserAccounts>
+                <LocalAccounts>
+                    <LocalAccount>
+                        <Password>
+                            <Value>password</Value> <!-- Burada admin hesabı için parola girin -->
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Description>Admin Kullanıcı</Description>
+                        <DisplayName>admin</DisplayName>
+                        <Group>Administrators</Group>
+                        <Name>admin</Name>
+                    </LocalAccount>
+                    <LocalAccount>
+                        <Password>
+                            <Value>password</Value> <!-- Burada misafir hesabı için parola girin -->
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Description>Misafir Kullanıcı</Description>
+                        <DisplayName>misafir</DisplayName>
+                        <Group>Users</Group>
+                        <Name>misafir</Name>
+                    </LocalAccount>
+                </LocalAccounts>
+            </UserAccounts>
+
+            <!-- Kurulum sırasında adımları atlamayacaktır-->
+            <SkipUserOOBE>false</SkipUserOOBE>
+            <SkipMachineOOBE>false</SkipMachineOOBE>
+            <SkipNetworkSetup>false</SkipNetworkSetup>
+            <SkipRearm>false</SkipRearm>
+        </component>
+    </settings>
+</unattend>

@@ -1,0 +1,1 @@
+DISM /Capture-Image /CaptureDir:<ImageSource> /ImageFile:<ImageDestination\install.wim> /Name:<ImageName> /compress:<none,fast,max>
